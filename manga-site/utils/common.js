@@ -23,7 +23,8 @@ const CommonUtil = {
     if (!text) {
       return;
     }
-    let re = new RegExp(/(?=(?:[^\"]|\"[^\"]*\")*$),/, 'g');
+    
+    let re = new RegExp(RegExp.escape(/(?=(?:[^\"]|\"[^\"]*\")*$),/), 'g');
     let cols = text.split(re);
     // for (var i = 0; i < matches.length; ++i) {
     //     matches[i] = matches[i].trim();
