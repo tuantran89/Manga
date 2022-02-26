@@ -23,7 +23,8 @@ const CommonUtil = {
     if (!text) {
       return;
     }
-    let cols = text.split(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
+    let re = new RegExp(/(?=(?:[^\"]|\"[^\"]*\")*$),/, 'g');
+    let cols = text.split(re);
     // for (var i = 0; i < matches.length; ++i) {
     //     matches[i] = matches[i].trim();
     //     if (matches[i] === ',') {
@@ -42,8 +43,10 @@ const CommonUtil = {
       return;
     }
     // var matches = text.match(/(\s*"[^"]+"\s*|\s*[^,]+|$)/g);
-    let matches = text.match(/(?=(?:[^\"]|\"[^\"]*\")*$)\n/);
-    let rows = text.split(/(?=(?:[^\"]|\"[^\"]*\")*$)\n/);
+
+    let re = new RegExp(/(?=(?:[^\"]|\"[^\"]*\")*$),/, 'g');
+    let matches = text.match(re);
+    let rows = text.split(re);
     let data = [];
     rows.forEach((row) => {
       if (row) {

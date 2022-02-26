@@ -31,12 +31,10 @@ const DateUtil = {
   },
   isDate: function (str) {
     // dd/mm/yyyy ||  dd/mm/yy ||  dd-mm-yyyy dd/mm/yy || dd-mm-yy ||  yyyy/mm/dd || yyyy-mm-dd
-    var r = /^((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{4}))|((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{2}))|((\d{4})(-|\/)(\d{1,2})(-|\/)(\d{1,2}))$/,
-      // Aug 22, yyyy
-      r1 = /^(\w{3})+\s+\d{2},+\s+\d{4}$/,
-      //28-August-yyyy
-      r2 = /^(\d{2})+\-+(\w{3,9})+\-+\d{4}$/;
 
+    let r = new RegExp(/^((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{4}))|((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{2}))|((\d{4})(-|\/)(\d{1,2})(-|\/)(\d{1,2}))$/, 'g');
+    let r1 = new RegExp(/^(\w{3})+\s+\d{2},+\s+\d{4}$/, 'g');
+    let r2 = new RegExp(/^(\d{2})+\-+(\w{3,9})+\-+\d{4}$/, 'g');
     return r.test(str) || r1.test(str) || r2.test(str);
   },
   convertDateStringToCustomFormat: (dateStr, timezoneOffset, customFormat) => {
