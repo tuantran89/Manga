@@ -6,6 +6,9 @@ RegExp.escape = function(str) {
 
 const _ = require('lodash');
 const CommonUtil = {
+  escapeR: function(str) {
+    return String(str).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  },
   decimals2: function (number) {
     number = number || 0;
     return Math.round(number * 100) / 100;
@@ -23,8 +26,9 @@ const CommonUtil = {
     if (!text) {
       return;
     }
+    let x = escapeR(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
+    let re = new RegExp(x, 'g');
     
-    let re = new RegExp(RegExp.escape(/(?=(?:[^\"]|\"[^\"]*\")*$),/), 'g');
     let cols = text.split(re);
     // for (var i = 0; i < matches.length; ++i) {
     //     matches[i] = matches[i].trim();
