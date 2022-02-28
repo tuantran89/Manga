@@ -5,11 +5,17 @@ module.exports = {
         let fundSource = req.query["fund_source"];
         let promise;
         if (fundSource === "manual") {
-            let condition = { fund_id: fundId };
-            if (ObjectId.isValid(fundId)) {
-                condition = { _id: fundId };
+            if (typeof fundId != "object") {
+                let condition = { fund_id: fundId };
+                if (ObjectId.isValid(fundId)) {
+                    condition = { _id: fundId };
+                }
+                promise = Fund.findOne(condition);
+            } else {
+                console.log('Not accept object type');
+                promise = Promise.reject('Not accept object type');
             }
-            promise = Fund.findOne(condition);
+        
         }
         return promise;
     }

@@ -57,8 +57,9 @@ methods.deleteFile = function (filePath, callback) {
   if (!filePath) return;
   var filePathArray = filePath.split('/');
   filePathArray = filePathArray[filePathArray.length - 1];
-  var url = path.join(__dirname, '../public/images', filePathArray);
-  var thumbnailUrl = path.join(__dirname, '../public/images/thumbnail', filePathArray);
+  var safe_input = path.normalize(filePathArray).replace(/^(\.\.(\/|\\|$))+/, '');
+  var url = path.join(__dirname, '../public/images', safe_input);
+  var thumbnailUrl = path.join(__dirname, '../public/images/thumbnail', safe_input);
   // Check file minified exists
   if (fs.existsSync(thumbnailUrl)) {
     fs.unlinkSync(thumbnailUrl);
