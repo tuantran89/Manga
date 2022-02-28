@@ -6,8 +6,11 @@ RegExp.escape = function(str) {
 
 const _ = require('lodash');
 const CommonUtil = {
-  escapeR: function(str) {
-    return String(str).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  arExp: String = /(?=(?:[^\"]|\"[^\"]*\")*$),/,
+  escapeStringRegexp: function(str) {
+    return String(str)
+		.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+		.replace(/-/g, '\\x2d');
   },
   decimals2: function (number) {
     number = number || 0;
@@ -26,8 +29,8 @@ const CommonUtil = {
     if (!text) {
       return;
     }
-    let x = escapeR(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
-    let re = new RegExp(x, 'g');
+    //let x = this.escapeR(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
+    let re = new RegExp(/\(\?=\(\?:\[\^\\"\]\|\\"\[\^\\"\]\*\\"\)\*\$\),/, 'g');
     
     let cols = text.split(re);
     // for (var i = 0; i < matches.length; ++i) {
@@ -48,8 +51,9 @@ const CommonUtil = {
       return;
     }
     // var matches = text.match(/(\s*"[^"]+"\s*|\s*[^,]+|$)/g);
+    var x = CommonUtil.escapeStringRegexp(this.arExp);
 
-    let re = new RegExp(/(?=(?:[^\"]|\"[^\"]*\")*$),/, 'g');
+    let re = new RegExp(x, 'g');
     let matches = text.match(re);
     let rows = text.split(re);
     let data = [];
@@ -81,4 +85,7 @@ const CommonUtil = {
   }
 };
 
+var x = CommonUtil.escapeStringRegexp(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
+
+console.log(x);
 module.exports = CommonUtil;
