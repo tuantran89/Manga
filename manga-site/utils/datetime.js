@@ -33,8 +33,8 @@ const DateUtil = {
     // dd/mm/yyyy ||  dd/mm/yy ||  dd-mm-yyyy dd/mm/yy || dd-mm-yy ||  yyyy/mm/dd || yyyy-mm-dd
 
     let r = new RegExp(/^((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{4}))|((\d{1,2})(-|\/)(\d{1,2})(-|\/)(\d{2}))|((\d{4})(-|\/)(\d{1,2})(-|\/)(\d{1,2}))$/, 'g');
-    let r1 = new RegExp(/^(\w{3})+\s+\d{2},+\s+\d{4}$/, 'g');
-    let r2 = new RegExp(/^(\d{2})+\-+(\w{3,9})+\-+\d{4}$/, 'g');
+    let r1 = new RegExp(/\^\(\\w\{3\}\)\+\\s\+\\d\{2\},\+\\s\+\\d\{4\}\$/, 'g');
+    let r2 = new RegExp(/\^\(\\d\{2\}\)\+\\\x2d\+\(\\w\{3,9\}\)\+\\\x2d\+\\d\{4\}\$/, 'g');
     return r.test(str) || r1.test(str) || r2.test(str);
   },
   convertDateStringToCustomFormat: (dateStr, timezoneOffset, customFormat) => {

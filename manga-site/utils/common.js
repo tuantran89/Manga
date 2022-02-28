@@ -1,12 +1,7 @@
 'use strict';
 
-RegExp.escape = function(str) {
-  return String(str).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-};
-
 const _ = require('lodash');
 const CommonUtil = {
-  arExp: String = /(?=(?:[^\"]|\"[^\"]*\")*$),/,
   escapeStringRegexp: function(str) {
     return String(str)
 		.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
@@ -51,7 +46,7 @@ const CommonUtil = {
       return;
     }
     // var matches = text.match(/(\s*"[^"]+"\s*|\s*[^,]+|$)/g);
-    var x = CommonUtil.escapeStringRegexp(this.arExp);
+    var x = CommonUtil.escapeStringRegexp(/\(\?=\(\?:\[\^\\"\]\|\\"\[\^\\"\]\*\\"\)\*\$\),/);
 
     let re = new RegExp(x, 'g');
     let matches = text.match(re);
@@ -85,7 +80,7 @@ const CommonUtil = {
   }
 };
 
-var x = CommonUtil.escapeStringRegexp(/(?=(?:[^\"]|\"[^\"]*\")*$),/);
+var x = CommonUtil.escapeStringRegexp(/^(\d{2})+\-+(\w{3,9})+\-+\d{4}$/);
 
 console.log(x);
 module.exports = CommonUtil;
