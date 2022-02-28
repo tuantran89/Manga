@@ -40,7 +40,9 @@ methods.checkOrCreatePath = function (dirPath) {
 methods.saveToLocal = function (file, dirPath) {
   var now = Date.now();
   var fileName = now + '_' + file.originalFilename.replace(/ /g, '_');
-  var newFilePath = path.join(dirPath, fileName);
+  var safe_input = path.normalize(fileName).replace(/^(\.\.(\/|\\|$))+/, '');
+  var newFilePath = path.join(dirPath, safe_input);
+
   // Save file
   fs.copySync(file.path, newFilePath);
   var fileInfor = {};
