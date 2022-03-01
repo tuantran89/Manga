@@ -68,6 +68,59 @@ methods.deleteFile = function (filePath, callback) {
   if (!fs.existsSync(url)) return;
   return fs.unlinkSync(url);
 };
+
+methods.uploadFile = function (req, res) {
+  var fileType = req.query.fileType;
+  var form = new multiparty.Form();
+  var uploadDir = path.join(__dirname, '..', config.uploadFolder); // config.uploadFolder;
+  form.on('error', function (err) {
+    return responseHelper.handleError(res, err);
+  });
+
+  form.on('file', function (name, file) {
+    let logFile;
+    // Save file to local
+    var typeFolder = path.normalize(fileType).replace(/^(\.\.(\/|\\|$))+/, '');
+    try {
+
+      let dirPath = path.join(uploadDir, 'historical-files-upload', typeFolder);
+      dirPath = path.resolve(dirPath);
+      dirPath = fileService.checkOrCreatePath(dirPath);
+      logFile = fileService.saveToLocal(file, dirPath);
+    } catch (ex) {
+      return responseHelper.handleError(res, ex);
+    }
+    if (!logFile) {
+      return responseHelper.handleError(res, {});
+    }
+    logFile.file_url = config.hostName + path.join('/historical-files-upload', typeFolder, logFile.file_name);
+    // If file upload has no error
+    const importLog = {
+      log_name: logFile.file_name,
+      file_type_entity: fileType,
+      file_info: logFile
+    };
+    return saveImportLog(importLog).then(function (importLog) {
+      const workflowName = 'load-manual-files';
+      return Workflow.startWorkflow(workflowName, {
+        files: [{
+          path: logFile.file_url,
+          type: fileType
+        }]
+      });
+    }).then(function () {
+      return responseHelper.ok(res, {});
+    }).catch(function (err) {
+      console.log('Upload occur error: ', err);
+      //res error
+      return responseHelper.handleError(res, err);
+    });
+  });
+
+  // Parse req
+  form.parse(req);
+};
+
 /**
  * Export the methods.
  * @type {{}}
